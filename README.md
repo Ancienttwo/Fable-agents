@@ -1,6 +1,6 @@
 # Fable-agents
 
-Portable installer for a three-layer Claude Code model-routing setup: a **Fable 5** orchestrator that only plans, delegates, and synthesizes, plus two execution subagents (**deep-reasoner** on Opus, **fast-worker** on Sonnet) and **Codex** as an independent peer engineer.
+Portable installer for a three-layer Claude Code model-routing setup: a **Fable 5** orchestrator that only plans, delegates, and synthesizes, plus three subagents (**deep-reasoner** on Opus, **fast-worker** on Sonnet, and **gatekeeper** on Opus as the acceptance and ship gate) and **Codex** as an independent peer engineer.
 
 ## Install
 
@@ -19,10 +19,10 @@ Flags:
 
 ## What it installs
 
-1. `.claude/agents/fast-worker.md` and `.claude/agents/deep-reasoner.md` into the target project
+1. `.claude/agents/fast-worker.md`, `.claude/agents/deep-reasoner.md`, and `.claude/agents/gatekeeper.md` into the target project
 2. The `## Model Routing Hierarchy` section into your global `CLAUDE.md` (`$CLAUDE_CONFIG_DIR/CLAUDE.md`, default `~/.claude/CLAUDE.md`)
 3. The `codex@openai-codex` plugin (marketplace `openai/codex-plugin-cc`), with a readiness check
-4. A headless smoke test confirming both agents respond
+4. A headless smoke test confirming all three agents respond
 
 The installer never overwrites a file that differs from the bundled version — it reports `[conflict]` and exits `3` instead, so you can diff and decide.
 
@@ -32,6 +32,7 @@ The installer never overwrites a file that differs from the bundled version — 
 - **Subagents always carry an explicit model/type.** No spawn — Agent tool or Workflow — may silently inherit Fable.
 - **`deep-reasoner`** (Opus, `effort: max`) — architecture research, hard reasoning, high-risk judgment calls. Recommends; the orchestrator confirms the final framework.
 - **`fast-worker`** (Sonnet, `effort: max`) — implementation, tests, refactors, docs, mechanical execution.
+- **`gatekeeper`** (Opus, `effort: max`) — last gate after execution subagents deliver: reviews the diff against the goal, runs the project's real verification, and returns a `PASS`/`FAIL`/`BLOCKED` ship recommendation. Advises, never decides — ship actions run only on the orchestrator's explicit execution order; never fixes code.
 - **Codex** — independent peer engineer, not a mandatory reviewer. Invoked via the `codex` plugin's `/codex:*` commands or `codex exec`.
 - **High-stakes decisions run dual-track:** deep-reasoner and Codex each produce a solution independently; the orchestrator compares and synthesizes rather than picking one.
 
@@ -42,6 +43,7 @@ SKILL.md                          Claude Code skill manifest (usable as a skill 
                                    is placed/symlinked under ~/.claude/skills/)
 assets/deep-reasoner.md           Agent definition installed into target projects
 assets/fast-worker.md             Agent definition installed into target projects
+assets/gatekeeper.md              Agent definition installed into target projects
 assets/model-routing-hierarchy.md Source of the CLAUDE.md section the installer appends
 scripts/install.sh                Idempotent installer (see flags above)
 ```
