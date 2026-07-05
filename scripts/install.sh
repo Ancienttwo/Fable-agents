@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Installs the user's standard model-routing setup. Idempotent; never
 # overwrites a differing file (reports [conflict] and exits 3 instead).
-#   1. .claude/agents/{fast-worker,deep-reasoner,gatekeeper}.md into the target project
+#   1. agents/{fast-worker,deep-reasoner,gatekeeper}.md into the global Claude home (~/.claude/agents)
 #   2. "## Model Routing Hierarchy" section into the global CLAUDE.md
 #   3. codex plugin (openai/codex-plugin-cc) + readiness check
-#   4. headless smoke test of the three agents
+#   4. headless smoke test of the three agents (run against --project, default cwd)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -27,8 +27,8 @@ done
 install_agent() {
   local name="$1"
   local src="$ASSETS_DIR/$name.md"
-  local dst="$PROJECT_DIR/.claude/agents/$name.md"
-  mkdir -p "$PROJECT_DIR/.claude/agents"
+  local dst="$CLAUDE_HOME/agents/$name.md"
+  mkdir -p "$CLAUDE_HOME/agents"
   if [ ! -f "$dst" ]; then
     cp "$src" "$dst"
     echo "[new] agent $name installed at $dst"

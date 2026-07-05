@@ -25,13 +25,13 @@ Fable bills against its own weekly pool, separate from the all-models pool. With
 ```bash
 git clone https://github.com/Ancienttwo/Fable-agents.git
 cd Fable-agents
-bash scripts/install.sh --project /path/to/your/project
+bash scripts/install.sh
 ```
 
-Run without `--project` to target the current directory. The script is idempotent — safe to re-run.
+Agents and the routing section install once, globally — every project on the machine picks them up. `--project` only scopes the headless smoke test to a specific project directory (default: cwd); it does not change where anything is installed. The script is idempotent — safe to re-run.
 
 Flags:
-- `--project <dir>` — target project root (default: cwd)
+- `--project <dir>` — project to run the smoke test from (default: cwd)
 - `--skip-plugin` — skip installing/checking the Codex plugin
 - `--skip-smoke` — skip the headless agent smoke test (use in sandboxes without API credentials)
 
@@ -39,11 +39,11 @@ Flags:
 
 Paste this to any Claude that can run commands on your machine (Claude Code CLI, desktop app, or IDE extension):
 
-> Install the model-routing setup from https://github.com/Ancienttwo/Fable-agents — clone the repo, run `bash scripts/install.sh --project <path-to-my-project>`, then report the per-layer results (`[new]`/`[ok]`/`[conflict]`/`[warn]`). Never overwrite anything on `[conflict]`.
+> Install the model-routing setup from https://github.com/Ancienttwo/Fable-agents — clone the repo, run `bash scripts/install.sh`, then report the per-layer results (`[new]`/`[ok]`/`[conflict]`/`[warn]`). Never overwrite anything on `[conflict]`.
 
 ## What it installs
 
-1. `.claude/agents/fast-worker.md`, `.claude/agents/deep-reasoner.md`, and `.claude/agents/gatekeeper.md` into the target project
+1. `agents/fast-worker.md`, `agents/deep-reasoner.md`, and `agents/gatekeeper.md` into your global Claude home (`$CLAUDE_CONFIG_DIR/agents`, default `~/.claude/agents`) — available in every project
 2. The `## Model Routing Hierarchy` section into your global `CLAUDE.md` (`$CLAUDE_CONFIG_DIR/CLAUDE.md`, default `~/.claude/CLAUDE.md`)
 3. The `codex@openai-codex` plugin (marketplace `openai/codex-plugin-cc`), with a readiness check
 4. A headless smoke test confirming all three agents respond
@@ -65,9 +65,9 @@ The installer never overwrites a file that differs from the bundled version — 
 ```
 SKILL.md                          Claude Code skill manifest (usable as a skill if this repo
                                    is placed/symlinked under ~/.claude/skills/)
-assets/deep-reasoner.md           Agent definition installed into target projects
-assets/fast-worker.md             Agent definition installed into target projects
-assets/gatekeeper.md              Agent definition installed into target projects
+assets/deep-reasoner.md           Agent definition installed into ~/.claude/agents (global)
+assets/fast-worker.md             Agent definition installed into ~/.claude/agents (global)
+assets/gatekeeper.md              Agent definition installed into ~/.claude/agents (global)
 assets/model-routing-hierarchy.md Source of the CLAUDE.md section the installer appends
 scripts/install.sh                Idempotent installer (see flags above)
 ```

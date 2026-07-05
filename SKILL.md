@@ -1,13 +1,13 @@
 ---
 name: setup-model-routing
-description: Install the user's standard model-routing setup (Fable 5 orchestrator, deep-reasoner = Opus 4.8 max for architecture research, fast-worker = Sonnet 5 max for execution, gatekeeper = Opus 4.8 max for the acceptance and ship gate, Codex plugin as independent peer engineer) into the current project and machine. Use whenever the user mentions 模型分工, model routing, routing hierarchy, fast-worker, deep-reasoner, 双轨 / dual-track, peer engineer setup, or wants to replicate/set up these subagents and the global CLAUDE.md routing section in a new project, repo, or machine — even if they only say "set up my agents" or "同步模型配置".
+description: Install the user's standard model-routing setup (Fable 5 orchestrator, deep-reasoner = Opus 4.8 max for architecture research, fast-worker = Sonnet 5 max for execution, gatekeeper = Opus 4.8 max for the acceptance and ship gate, Codex plugin as independent peer engineer) globally on this machine. Use whenever the user mentions 模型分工, model routing, routing hierarchy, fast-worker, deep-reasoner, 双轨 / dual-track, peer engineer setup, or wants to replicate/set up these subagents and the global CLAUDE.md routing section on a new machine — even if they only say "set up my agents" or "同步模型配置".
 ---
 
 # Setup Model Routing
 
 Reproduce the user's standard three-layer model-routing setup. After a successful run, all of the following hold:
 
-1. The target project has `.claude/agents/fast-worker.md`, `.claude/agents/deep-reasoner.md`, and `.claude/agents/gatekeeper.md` (from `assets/`).
+1. The global Claude home (`$CLAUDE_CONFIG_DIR/agents`, default `~/.claude/agents`) has `fast-worker.md`, `deep-reasoner.md`, and `gatekeeper.md` (from `assets/`) — available in every project.
 2. The global `CLAUDE.md` (`$CLAUDE_CONFIG_DIR/CLAUDE.md`, default `~/.claude/CLAUDE.md`) contains the `## Model Routing Hierarchy` section.
 3. The codex plugin (`codex@openai-codex`) is installed and its readiness check reports `"ready": true`.
 4. All three agents answer a headless smoke test.
@@ -16,13 +16,13 @@ The routing model this installs: Fable 5 plans, delegates, and synthesizes — a
 
 ## Workflow
 
-Run the installer from the target project root (or pass `--project <dir>`):
+Run the installer (installs globally regardless of cwd):
 
 ```bash
 bash ~/.claude/skills/setup-model-routing/scripts/install.sh
 ```
 
-Flags: `--project <dir>` (default: cwd), `--skip-plugin` (no plugin install/check), `--skip-smoke` (no headless agent test — use in sandboxes without API credentials).
+Flags: `--project <dir>` (project to run the smoke test from, default: cwd — does not change install location), `--skip-plugin` (no plugin install/check), `--skip-smoke` (no headless agent test — use in sandboxes without API credentials).
 
 Then read the line-prefixed report and act on it:
 
@@ -34,7 +34,7 @@ The script exits 0 on success, 3 when any `[conflict]` was found, 2 on usage err
 
 ## Report format
 
-Summarize per layer, separately — do not collapse into one "done": project agents / global CLAUDE.md / codex plugin / smoke tests. Unverified layers are explicit gaps, not successes. Remind the user that an already-running interactive session loads agent types at startup, so this session won't see newly installed agents until restart or `/reload-plugins`.
+Summarize per layer, separately — do not collapse into one "done": global agents / global CLAUDE.md / codex plugin / smoke tests. Unverified layers are explicit gaps, not successes. Remind the user that an already-running interactive session loads agent types at startup, so this session won't see newly installed agents until restart or `/reload-plugins`.
 
 ## Boundaries
 
