@@ -1,8 +1,26 @@
 # Fable-agents
 
+**English** · [简体中文](README.zh-CN.md)
+
 Portable installer for a three-layer Claude Code model-routing setup: a **Fable 5** orchestrator that only plans, delegates, and synthesizes, plus three subagents (**deep-reasoner** on Opus, **fast-worker** on Sonnet, and **gatekeeper** on Opus as the acceptance and ship gate) and **Codex** as an independent peer engineer.
 
+## Why route
+
+One Max (20x) subscription, one day of heavy multi-agent work (2026-07-05): **902M tokens** across **4,911 requests** at a **96.1% cache-hit rate** — **$731** in API-equivalent usage.
+
+![Daily usage: 902,494,882 tokens, 4,911 requests, 96.1% cache-hit rate, $731.38 API-equivalent](docs/images/daily-usage-overview.png)
+
+The request split is the routing contract at work: Fable answered only **492 requests (10%)** — pure orchestration: plan, delegate, judge, synthesize. Sonnet carried **2,924 execution requests**; Opus took **705** judgment and gate runs.
+
+![Per-model split: claude-sonnet-5 2,924 requests, claude-fable-5 492, claude-opus-4-8 705](docs/images/per-model-request-split.png)
+
+Fable bills against its own weekly pool, separate from the all-models pool. With Fable doing orchestration only, the two pools drain in step — **32% Fable vs 26% all-models** mid-week. A single model's weekly usage keeps pace with the rest of the subscription combined, instead of the Fable pool burning out on execution work while the shared pool idles.
+
+![Claude Max weekly limits: Fable pool 32% used, all-models pool 26% used](docs/images/weekly-limits-fable-vs-all-models.png)
+
 ## Install
+
+### Option A — clone and run
 
 ```bash
 git clone https://github.com/Ancienttwo/Fable-agents.git
@@ -16,6 +34,12 @@ Flags:
 - `--project <dir>` — target project root (default: cwd)
 - `--skip-plugin` — skip installing/checking the Codex plugin
 - `--skip-smoke` — skip the headless agent smoke test (use in sandboxes without API credentials)
+
+### Option B — send to your Claude
+
+Paste this to any Claude that can run commands on your machine (Claude Code CLI, desktop app, or IDE extension):
+
+> Install the model-routing setup from https://github.com/Ancienttwo/Fable-agents — clone the repo, run `bash scripts/install.sh --project <path-to-my-project>`, then report the per-layer results (`[new]`/`[ok]`/`[conflict]`/`[warn]`). Never overwrite anything on `[conflict]`.
 
 ## What it installs
 
