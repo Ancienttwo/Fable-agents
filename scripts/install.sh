@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Installs the user's standard model-routing setup. Idempotent; never
 # overwrites a differing file (reports [conflict] and exits 3 instead).
-#   1. .claude/agents/{fast-worker,deep-reasoner}.md into the target project
+#   1. .claude/agents/{fast-worker,deep-reasoner,gatekeeper}.md into the target project
 #   2. "## Model Routing Hierarchy" section into the global CLAUDE.md
 #   3. codex plugin (openai/codex-plugin-cc) + readiness check
-#   4. headless smoke test of both agents
+#   4. headless smoke test of the three agents
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -98,9 +98,10 @@ smoke_agent() {
 echo "== setup-model-routing: project=$PROJECT_DIR global=$CLAUDE_HOME =="
 install_agent fast-worker
 install_agent deep-reasoner
+install_agent gatekeeper
 install_global_section
 if [ "$SKIP_PLUGIN" -eq 0 ]; then ensure_plugin; else echo "[skip] plugin step"; fi
-if [ "$SKIP_SMOKE" -eq 0 ]; then smoke_agent fast-worker; smoke_agent deep-reasoner; else echo "[skip] smoke tests"; fi
+if [ "$SKIP_SMOKE" -eq 0 ]; then smoke_agent fast-worker; smoke_agent deep-reasoner; smoke_agent gatekeeper; else echo "[skip] smoke tests"; fi
 
 if [ "$CONFLICT" -eq 1 ]; then
   echo "== done with conflicts — resolve [conflict] lines above =="

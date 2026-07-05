@@ -1,18 +1,18 @@
 ---
 name: setup-model-routing
-description: Install the user's standard model-routing setup (Fable 5 orchestrator, deep-reasoner = Opus 4.8 max for architecture research, fast-worker = Sonnet 5 max for execution, Codex plugin as independent peer engineer) into the current project and machine. Use whenever the user mentions 模型分工, model routing, routing hierarchy, fast-worker, deep-reasoner, 双轨 / dual-track, peer engineer setup, or wants to replicate/set up these subagents and the global CLAUDE.md routing section in a new project, repo, or machine — even if they only say "set up my agents" or "同步模型配置".
+description: Install the user's standard model-routing setup (Fable 5 orchestrator, deep-reasoner = Opus 4.8 max for architecture research, fast-worker = Sonnet 5 max for execution, gatekeeper = Opus 4.8 max for the acceptance and ship gate, Codex plugin as independent peer engineer) into the current project and machine. Use whenever the user mentions 模型分工, model routing, routing hierarchy, fast-worker, deep-reasoner, 双轨 / dual-track, peer engineer setup, or wants to replicate/set up these subagents and the global CLAUDE.md routing section in a new project, repo, or machine — even if they only say "set up my agents" or "同步模型配置".
 ---
 
 # Setup Model Routing
 
 Reproduce the user's standard three-layer model-routing setup. After a successful run, all of the following hold:
 
-1. The target project has `.claude/agents/fast-worker.md` and `.claude/agents/deep-reasoner.md` (from `assets/`).
+1. The target project has `.claude/agents/fast-worker.md`, `.claude/agents/deep-reasoner.md`, and `.claude/agents/gatekeeper.md` (from `assets/`).
 2. The global `CLAUDE.md` (`$CLAUDE_CONFIG_DIR/CLAUDE.md`, default `~/.claude/CLAUDE.md`) contains the `## Model Routing Hierarchy` section.
 3. The codex plugin (`codex@openai-codex`) is installed and its readiness check reports `"ready": true`.
-4. Both agents answer a headless smoke test.
+4. All three agents answer a headless smoke test.
 
-The routing model this installs: Fable 5 plans, delegates, and synthesizes — and exists only in the main loop; every spawned subagent (foreground or background, Agent tool or Workflow) MUST carry an explicit agent type or model override and never inherit Fable (quota constraint). deep-reasoner (Opus, `effort: max`) executes architecture research, hard reasoning, and judgment-type runs and returns recommendations — the final framework is always confirmed by the orchestrator; fast-worker (Sonnet, `effort: max`) executes implementation, tests, refactoring, docs, grading, and mechanical work; Codex acts as an independent peer engineer. High-stakes decisions run dual-track: deep-reasoner and Codex produce solutions in parallel without seeing each other, then the main loop compares and decides.
+The routing model this installs: Fable 5 plans, delegates, and synthesizes — and exists only in the main loop; every spawned subagent (foreground or background, Agent tool or Workflow) MUST carry an explicit agent type or model override and never inherit Fable (quota constraint). deep-reasoner (Opus, `effort: max`) executes architecture research, hard reasoning, and judgment-type runs and returns recommendations — the final framework is always confirmed by the orchestrator; fast-worker (Sonnet, `effort: max`) executes implementation, tests, refactoring, docs, grading, and mechanical work; gatekeeper (Opus, effort: max) is the acceptance and ship gate that reviews delivered work against the goal, runs verification, and returns a PASS/FAIL/BLOCKED ship recommendation — the orchestrator decides, ship actions run only on its explicit execution order, and the gate never fixes code; Codex acts as an independent peer engineer. High-stakes decisions run dual-track: deep-reasoner and Codex produce solutions in parallel without seeing each other, then the main loop compares and decides.
 
 ## Workflow
 
