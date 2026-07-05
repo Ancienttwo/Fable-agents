@@ -54,8 +54,8 @@ The installer never overwrites a file that differs from the bundled version — 
 
 - **Fable 5 (main loop) = orchestrator.** Plans, delegates, synthesizes. Never does execution work inline.
 - **Subagents always carry an explicit model/type.** No spawn — Agent tool or Workflow — may silently inherit Fable.
-- **`deep-reasoner`** (Opus, `effort: max`) — architecture research, hard reasoning, high-risk judgment calls. Recommends; the orchestrator confirms the final framework.
-- **`fast-worker`** (Sonnet, `effort: max`) — implementation, tests, refactors, docs, mechanical execution.
+- **`deep-reasoner`** (Opus, `effort: max`) — architecture research, hard reasoning, high-risk judgment calls. Recommends; the orchestrator confirms the final framework. Returns `RECOMMENDATION: <one-line> — confidence: HIGH/MEDIUM/LOW`.
+- **`fast-worker`** (Sonnet, `effort: max`) — implementation, tests, refactors, docs, mechanical execution. Returns `RESULT: DONE/PARTIAL/BLOCKED` with verification output.
 - **`gatekeeper`** (Opus, `effort: max`) — last gate after execution subagents deliver: reviews the diff against the goal, runs the project's real verification, and returns a `PASS`/`FAIL`/`BLOCKED` ship recommendation. Advises, never decides — ship actions run only on the orchestrator's explicit execution order; never fixes code.
 - **Codex** — independent peer engineer, not a mandatory reviewer. Invoked via the `codex` plugin's `/codex:*` commands or `codex exec`.
 - **High-stakes decisions run dual-track:** deep-reasoner and Codex each produce a solution independently; the orchestrator compares and synthesizes rather than picking one.

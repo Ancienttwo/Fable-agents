@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] - 2026-07-05
+
+### Changed
+
+- `fast-worker` — now opens with a machine-readable `RESULT: DONE/PARTIAL/BLOCKED` line, pastes real verification output, labels unverified claims `[inferred]`/`[unverified]`, and states explicit default boundaries (no commit/push/PR unless ordered).
+- `deep-reasoner` — now opens with `RECOMMENDATION: <one sentence> — confidence: HIGH/MEDIUM/LOW`, labels evidence tri-state, and makes its recommend-only / no-side-effects role explicit. Kept on all tools; a local `tools:` allowlist (e.g. `["Read","Grep","Glob","Bash","WebSearch","WebFetch"]`) is a documented opt-in, not the default, because static allowlists block per-machine MCP tools.
+- Re-running the installer on a machine with v1.0.0 copies reports `[conflict]` for these two agents — diff and take the bundled version.
+
+### Fixed
+
+- `install.sh` — agent definitions now install globally into `$CLAUDE_CONFIG_DIR/agents` (default `~/.claude/agents`) instead of per-project (fix landed on `main` after v1.0.0; first released here).
+
 ## [1.0.0] - 2026-07-05
 
 First release.
